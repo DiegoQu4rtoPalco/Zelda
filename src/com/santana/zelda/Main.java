@@ -1,12 +1,17 @@
 package com.santana.zelda;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
+
+import com.santana.entities.Entities;
+import com.santana.entities.Player;
+import com.santana.graficos.SpriteSheet;
 
 public class Main extends Canvas implements Runnable {
 
@@ -17,6 +22,9 @@ public class Main extends Canvas implements Runnable {
 
 	private Thread thread;
 	private boolean isRunning;
+	
+	public List <Entities> entities;
+	public SpriteSheet spriteSheet;
 
 	public static void main(String[] args) {
 		Main game = new Main();
@@ -26,6 +34,11 @@ public class Main extends Canvas implements Runnable {
 	public Main() {
 		this.setPreferredSize(new Dimension(WHIDTH, HEIGHT));
 		initFrame();
+		entities = new ArrayList<Entities>();
+		spriteSheet = new SpriteSheet("/personagem.png");
+		Player player = new Player(0, 0, 60, 60, spriteSheet.getSprite(120, 0, 60, 60));
+		entities.add(player);
+		
 	}
 
 	public synchronized void start() {
@@ -93,13 +106,16 @@ public class Main extends Canvas implements Runnable {
 		}
 		
 		Graphics g = this.getGraphics();
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 100, 100);
+		for(int i = 0; i < entities.size(); i++) {
+			entities.get(i).render(g);
+		}
 
 	}
 
 	private void tick() {
-		
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).ticks();
+		}
 
 	}
 
