@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 
 public class Entities {
 	
-	protected int x;
-	protected int y;
+	protected double x;
+	protected double y;
 	protected int whidth;
 	protected int height;
 	
@@ -30,11 +30,11 @@ public class Entities {
 	}
 	
 	public int getX() {
-		return x;
+		return (int)x;
 	}
 
 	public int getY() {
-		return y;
+		return (int)y;
 	}
 
 	public int getWhidth() {
