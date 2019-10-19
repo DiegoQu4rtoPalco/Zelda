@@ -3,6 +3,8 @@ package com.santana.zelda;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import com.santana.entities.Entities;
 import com.santana.entities.Player;
 import com.santana.graficos.SpriteSheet;
 
-public class Main extends Canvas implements Runnable {
+public class Main extends Canvas implements Runnable, KeyListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,9 +24,12 @@ public class Main extends Canvas implements Runnable {
 
 	private Thread thread;
 	private boolean isRunning;
+	private Player player;
 	
 	public List <Entities> entities;
 	public SpriteSheet spriteSheet;
+	
+	
 
 	public static void main(String[] args) {
 		Main game = new Main();
@@ -36,9 +41,9 @@ public class Main extends Canvas implements Runnable {
 		initFrame();
 		entities = new ArrayList<Entities>();
 		spriteSheet = new SpriteSheet("/personagem.png");
-		Player player = new Player(0, 0, 60, 60, spriteSheet.getSprite(120, 0, 60, 60));
+		player = new Player(0, 0, 60, 60, spriteSheet.getSprite(120, 0, 60, 60));
 		entities.add(player);
-		
+		addKeyListener(this);
 	}
 
 	public synchronized void start() {
@@ -106,6 +111,7 @@ public class Main extends Canvas implements Runnable {
 		}
 		
 		Graphics g = this.getGraphics();
+		g.clearRect(0, 0, WHIDTH, HEIGHT);
 		for(int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(g);
 		}
@@ -117,6 +123,49 @@ public class Main extends Canvas implements Runnable {
 			entities.get(i).ticks();
 		}
 
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+			player.right = true;
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+			player.left = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+			player.up = true;
+		}
+		
+		else if(e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+			player.down = true;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+			player.right = false;
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+			player.left = false;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+			player.up = false;
+		}
+		
+		else if(e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+			player.down = false;
+		}
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
